@@ -1,0 +1,6 @@
+[submodule "app/modules/dms"]
+	path = app/modules/dms
+	url = git@github.com:availabs/dms.git
+[submodule "app/modules/avl-falcor"]
+	path = app/modules/avl-falcor
+	url = git@github.com:availabs/avl-falcor.git
