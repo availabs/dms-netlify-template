@@ -17,6 +17,7 @@ import {
 } from "../modules/avl-falcor"
 
 import { falcor } from '../server/falcor.ts'
+import getDmsConfig, { adminSite } from './dms_utils'
 
 // ----------------------------------------------------
 // -------------- Config Setup-------------------------
@@ -30,47 +31,71 @@ let {
 
 //const dmsPath= `${baseUrl}${baseUrl === '/' ? '' : '/'}`
 const clientFalcor = falcorGraph(API_HOST)
-let dmsConfig = pageConfig?.[0]({
-    // app: "mitigat-ny-prod",
-    // type: "redesign",
-    app: "dms-site",
-    type: "docs-npmrds",
-    // app: "dms-docs",
-    // type: "test",
-    useFalcor: useFalcor,
-    baseUrl: "",
-    //checkAuth
-  })
+// let dmsConfig = pageConfig?.[0]({
+//     // app: "mitigat-ny-prod",
+//     // type: "redesign",
+//     app: "dms-site",
+//     type: "docs-npmrds",
+//     // app: "dms-docs",
+//     // type: "test",
+//     useFalcor: useFalcor,
+//     baseUrl: "",
+//     //checkAuth
+//   })
 // -------------- Config Setup--------------------------
   
 
-// export const loader = async({ request, params }) => {
-//   //console.log('loader config', dmsConfig)
-//   console.log('dms_api', request, params)
-//   const { falcor } = await import('../server/falcor.ts')
-//   let data =  await dmsDataLoader(falcor, dmsConfig, `/${params['*'] || ''}`)
-//   console.timeEnd('loader data')
+export const loader = async({ request, params }) => {
+  console.log('dms_api - loader', request.url, )
+  const adminData =  await dmsDataLoader(falcor, adminSite, `/`)
+  const patterns = adminData[0]?.patterns
+  const dmsConfig = getDmsConfig(
+    request.headers.get('host'), 
+    request.body.path,
+    patterns
+  )
+  console.log('dms_api - loader - dmsConfig', dmsConfig)
+  let data =  await dmsDataLoader(falcor, dmsConfig, `/${params['*'] || ''}`)
+  console.timeEnd('loader data')
 
-//   return data
-// }
+  return {
+    host: request.headers.get('host'),
+    data,
+    patterns
+  }
+}
 
 export const action = async ({ request, params }) => {
-  console.time('dms-api-action')
+  console.time(`dms-api action ${request.url}`)  
   const form = await request.formData();
+  const adminData =  await dmsDataLoader(falcor, adminSite, `/`)
+  const patterns = adminData[0]?.patterns
+  const dmsConfig = getDmsConfig(
+    request.headers.get('host'), 
+    form.get("path"),
+    patterns
+  )
+  
   //console.log('dms_api - action - request', request)
   let requestType = form.get("requestType")
   if(requestType === 'data') {
-    return await dmsDataLoader(falcor, dmsConfig, form.get("path"))
+    const data = await dmsDataLoader(falcor, dmsConfig, form.get("path"))
+    console.timeEnd(`dms-api action ${request.url}`)
+    return {
+      host: request.headers.get('host'),
+      data,
+      patterns
+    }
   }
   //return {}
-  const resp =  dmsDataEditor(falcor,
+  return await dmsDataEditor(falcor,
     dmsConfig,
     JSON.parse(form.get("data")),
     requestType,
     form.get("path")
   )
-  console.timeEnd('dms-api-action')
-  return resp
+  console.log('dms-api - action - return', host, data.length, patterns.length)
+  
 };
 
 
