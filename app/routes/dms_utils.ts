@@ -9,7 +9,7 @@ import { matchRoutes } from 'react-router';
 // ----------------------------------------------------
 const adminSettings = {
     app: "mitigat-ny-prod",
-    type: "test",
+    type: "prod",
     base_url: "list",
     pattern_type: 'admin',
     subdomain: '*'
