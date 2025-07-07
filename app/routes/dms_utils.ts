@@ -12,6 +12,7 @@ const adminSettings = {
     type: "test",
     base_url: "list",
     pattern_type: 'admin',
+    subdomain: '*'
 
 }
 export const adminSite = adminConfig?.[0](adminSettings)
@@ -19,7 +20,8 @@ export const adminSite = adminConfig?.[0](adminSettings)
 const patternTypes = {
     page: pageConfig,//await import('../modules/dms/src/patterns/page/siteConfig.jsx'),
     forms: formsConfig,
-    admin: adminConfig
+    admin: adminConfig,
+
 }
 
 const getSubdomain = (host) => {
