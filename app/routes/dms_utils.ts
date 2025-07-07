@@ -3,7 +3,7 @@ import adminConfig from '../modules/dms/src/patterns/admin/siteConfig.jsx'
 import formsConfig from '../modules/dms/src/patterns/forms/siteConfig.jsx'
 import { dmsDataLoader } from '../modules/dms/src/api/index.js'
 import { matchRoutes } from 'react-router';
-const { falcor } = await import('../server/falcor.ts')
+//const { falcor } = await import('../server/falcor.ts')
 // ----------------------------------------------------
 // -------------- Get DMS Config ----------------------
 // ----------------------------------------------------
