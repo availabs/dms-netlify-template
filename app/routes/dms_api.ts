@@ -76,7 +76,7 @@ export const action = async ({ request, params }) => {
     patterns
   )
   
-  //console.log('dms_api - action - request', request)
+  console.log('dms_api - action - request', form.get("path"))
   let requestType = form.get("requestType")
   if(requestType === 'data') {
     const data = await dmsDataLoader(falcor, dmsConfig, form.get("path"))
@@ -88,8 +88,9 @@ export const action = async ({ request, params }) => {
     }
   }
   //return {}
+  let customConfig = form.get('dmsConfig')
   return await dmsDataEditor(falcor,
-    dmsConfig,
+    customConfig ? JSON.parse(customConfig) : dmsConfig,
     JSON.parse(form.get("data")),
     requestType,
     form.get("path")

@@ -44,10 +44,10 @@ let env = typeof document === "undefined" ? "server" : "client";
   
 
 export const loader = async({ request, params }) => {
-  console.log('index - loader - request', request.url)
+  //console.log('index - loader - request', request.url)
   const { falcor } = await import('../server/falcor.ts')
   const adminData =  await dmsDataLoader(falcor, adminSite, `/`) 
-  console.log('dms - loader - adminData', adminData)  
+  console.log('dms - loader - adminData', adminData, adminSite)  
   const patterns = adminData[0]?.patterns
   
   const dmsConfig = getDmsConfig(
@@ -103,7 +103,7 @@ export const clientLoader = async({ request, params }) => {
   console.time('loader data')
   let res =  await fetch(`/dms_api`, { method:"POST", body })
   let data = await res.json()
-  // console.log('client loader data', data)
+  console.log('client loader data', data)
   console.timeEnd('loader data')
 
   return data
@@ -116,13 +116,13 @@ export const clientAction = async ({ request, params }) => {
   const form = await request.formData();
   form.append('path', params['*'])
   //return {}
-  console.time('action  data')
+  console.time('clientAction  data')
   let res =  await fetch(`/dms_api`, {
       method:"POST", 
       body: form
   })
   let data = await res.json()
-  console.timeEnd('action  data')
+  console.timeEnd('clientAction  data')
   
   return data
 };
@@ -135,18 +135,24 @@ export default function DMS({ loaderData }) {
   const params = useParams();
   let path = React.useMemo(() => `/${params['*'] || ''}`,[params])
   const { host, data, patterns } = loaderData
-  console.log('index - dmsComp - loaderData', host, data?.length, patterns?.length)
+  //console.log('index - dmsComp - loaderData', host, data?.length, patterns?.length)
   const dmsConfig = React.useMemo(() => getDmsConfig(host, path,patterns), [path,host])
-  console.log('index - DMS Comp - data ', data?.length, path,host)
-  console.log('index - DMS Comp - dmsConfig', dmsConfig)
-  //console.log('DMS Comp - dms config', dmsConfig, env)
+  //console.log('index - DMS Comp - data ', data?.length, path,host)
+  //console.log('index - DMS Comp - dmsConfig', dmsConfig)
+  // console.log('DMS Comp - dms config', 
+  //   dmsConfig.baseUrl,
+  //   `/${dmsConfig.baseUrl?.replace(/^\/|\/$/g, '')}`, 
+  //   path, 
+  //   path.replace( dmsConfig.baseUrl, '')
+  // )
  
   const AuthedManager= authWrapper(DmsManager)
   const content = (
       <AuthedManager
-        path={ path }
+        path={ path.replace( dmsConfig.baseUrl, '') }
         config={ dmsConfig }
         falcor={ clientFalcor }
+        mode={'ssr'}
     />
   )
   return (<>{content}</>)

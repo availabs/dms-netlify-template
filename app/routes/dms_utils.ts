@@ -9,7 +9,7 @@ import { matchRoutes } from 'react-router';
 // ----------------------------------------------------
 const adminSettings = {
     app: "mitigat-ny-prod",
-    type: "prod",
+    type: "test",
     base_url: "list",
     pattern_type: 'admin',
     subdomain: '*'
@@ -70,7 +70,7 @@ const getDmsConfig = (host, path, patterns=[] ) => {
             d.subdomain === '*'
           )
           // -- map to matchRoutes format
-          .map(d => ({path:`${d.base_url}*`, ...d})), 
+          .map(d => ({path:`${d.base_url?.replace(/^\/|\/$/g, '')}/*`, ...d})), 
           // -- matchRoutes options
           {pathname: path}
     )   
@@ -84,7 +84,7 @@ const getDmsConfig = (host, path, patterns=[] ) => {
             baseUrl: `/${patternConfig.base_url?.replace(/^\/|\/$/g, '')}`
         }) :
         null
-    console.log('dms_utils - getDmsConfig', getSubdomain(host), path, patterns.length)
+    //console.log('dms_utils - getDmsConfig', getSubdomain(host), path, patterns.length)
     return config
 }
 
