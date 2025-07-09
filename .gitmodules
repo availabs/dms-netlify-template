@@ -1,6 +1,3 @@
 [submodule "app/modules/dms"]
 	path = app/modules/dms
 	url =https://github.com/availabs/dms.git
-[submodule "app/modules/avl-falcor"]
-	path = app/modules/avl-falcor
-	url = https://github.com/availabs/avl-falcor.git
