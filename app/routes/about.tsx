@@ -10,8 +10,8 @@ export const loader = async({ request, params }) => {
           <h1 className="p-8 text-3xl font-bold underline">
           About Page! Test 123 {env} 
           </h1>
-          <div>DMSAPP {process.env.DMSAPP}</div>
-          <div>DMS_APP2 {process.env.DMS_APP2}</div>
+          <div>DMS_APP {import.meta.env.VITE_DMS_APP} {import.meta.env.VITE_DMS_APP}</div>
+          <div>DMS_TYPE {import.meta.env.VITE_DMS_TYPE}</div>
         </div>
     )
   }
@@ -22,6 +22,8 @@ export default function Home ({loaderData}) {
   return (
       <div className='w-screen h-screen bg-slate-100'>
         {content}
+        <div>{import.meta.env.VITE_DMS_APP}</div>
+        <div>{import.meta.env.VITE_DMS_TYPE}</div>
         <Link to='/'>Home</Link>
         
       </div>
