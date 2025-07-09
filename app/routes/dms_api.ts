@@ -54,6 +54,7 @@ export const loader = async({ request, params }) => {
     request.body.path,
     patterns
   )
+  console.time('loader data')
   console.log('dms_api - loader - dmsConfig', dmsConfig)
   let data =  await dmsDataLoader(falcor, dmsConfig, `/${params['*'] || ''}`)
   console.timeEnd('loader data')
@@ -78,8 +79,15 @@ export const action = async ({ request, params }) => {
   
   console.log('dms_api - action - request', form.get("path"))
   let requestType = form.get("requestType")
+  let customConfig = form.get('dmsConfig')
+  
   if(requestType === 'data') {
-    const data = await dmsDataLoader(falcor, dmsConfig, form.get("path"))
+    console.log('dms api - data request- config',customConfig ? JSON.parse(customConfig) : dmsConfig)
+    const data = await dmsDataLoader(falcor, 
+      customConfig ? JSON.parse(customConfig) : dmsConfig, 
+      form.get("path")
+    )
+    console.log('dms api - data request- data', data)
     console.timeEnd(`dms-api action ${request.url}`)
     return {
       host: request.headers.get('host'),
@@ -88,7 +96,6 @@ export const action = async ({ request, params }) => {
     }
   }
   //return {}
-  let customConfig = form.get('dmsConfig')
   return await dmsDataEditor(falcor,
     customConfig ? JSON.parse(customConfig) : dmsConfig,
     JSON.parse(form.get("data")),

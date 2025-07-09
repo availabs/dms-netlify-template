@@ -82,7 +82,8 @@ const getDmsConfig = (host, path, patterns=[] ) => {
             type: patternConfig?.doc_type || patternConfig.type,
             pattern: patternConfig,
             siteType: adminSettings.type,
-            baseUrl: `/${patternConfig.base_url?.replace(/^\/|\/$/g, '')}`
+            baseUrl: `/${patternConfig.base_url?.replace(/^\/|\/$/g, '')}`,
+            pgEnv:'hazmit_dama'
         }) :
         null
     //console.log('dms_utils - getDmsConfig', getSubdomain(host), path, patterns.length)
