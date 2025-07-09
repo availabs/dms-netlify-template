@@ -3,13 +3,14 @@ import adminConfig from '../modules/dms/src/patterns/admin/siteConfig.jsx'
 import formsConfig from '../modules/dms/src/patterns/forms/siteConfig.jsx'
 import { dmsDataLoader } from '../modules/dms/src/api/index.js'
 import { matchRoutes } from 'react-router';
+import DMSconfig from "../dmsconfig.json"
 //const { falcor } = await import('../server/falcor.ts')
 // ----------------------------------------------------
 // -------------- Get DMS Config ----------------------
 // ----------------------------------------------------
 const adminSettings = {
-    app: "mitigat-ny-prod",
-    type: "test",
+    app: DMSconfig.APP,
+    type: DMSconfig.TYPE,
     base_url: "list",
     pattern_type: 'admin',
     subdomain: '*'
