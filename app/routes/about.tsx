@@ -6,9 +6,13 @@ export const loader = async({ request, params }) => {
 
   return  { 
     content:  (
-        <h1 className="p-8 text-3xl font-bold underline">
-        About Page! Test 123 {env} { process.env.DMSAPP}
-        </h1>
+        <div>
+          <h1 className="p-8 text-3xl font-bold underline">
+          About Page! Test 123 {env} 
+          </h1>
+          <div>DMSAPP {process.env.DMSAPP}</div>
+          <div>DMS_APP2 {process.env.DMS_APP2}</div>
+        </div>
     )
   }
 }
